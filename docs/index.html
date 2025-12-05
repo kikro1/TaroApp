@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarot AI — Онлайн расклады</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>🔮 Tarot AI — Онлайн расклад</h1>
+
+    <p>Введите данные и выберите расклад, чтобы получить толкование карт и ответ ИИ.</p>
+
+    <!-- Форма пользователя -->
+    <div class="user-fields">
+      <label>Ваше имя:</label>
+      <input id="userName" type="text" placeholder="Введите имя" />
+
+      <label>Дата рождения:</label>
+      <input id="birthDate" type="date" />
+
+      <label>Ваш вопрос:</label>
+      <textarea id="userQuestion" placeholder="Например: Что ждёт меня в отношениях?"></textarea>
+    </div>
+
+    <!-- Кнопки раскладов -->
+    <h2>Выберите расклад</h2>
+    <div class="buttons">
+      <button onclick="drawSpread('one')">1 карта</button>
+      <button onclick="drawSpread('three')">3 карты</button>
+      <button onclick="drawSpread('love')">Любовный расклад</button>
+      <button onclick="drawSpread('path')">Путь и совет</button>
+      <button onclick="drawSpread('celtic')">Кельтский крест</button>
+      <button onclick="drawSpread('yesno')">Да / Нет</button>
+    </div>
+
+    <!-- Результат -->
+    <div id="result" class="result"></div>
+  </div>
+
+  <script src="cards.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
