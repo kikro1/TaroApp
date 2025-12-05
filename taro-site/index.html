@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Таро Онлайн — Расклады</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>🔮 Таро Онлайн</h1>
+    <p>Выберите расклад и получите толкование карт</p>
+</header>
+
+<section class="spreads">
+    <button onclick="drawSpread('one')">1 карта</button>
+    <button onclick="drawSpread('three')">3 карты</button>
+    <button onclick="drawSpread('love')">Любовный расклад</button>
+    <button onclick="drawSpread('path')">Путь (5 карт)</button>
+    <button onclick="drawSpread('celtic')">Кельтский крест</button>
+    <button onclick="drawSpread('yesno')">Да / Нет</button>
+</section>
+
+<section id="result"></section>
+
+<script src="cards.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
