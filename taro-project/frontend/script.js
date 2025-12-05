@@ -60,12 +60,12 @@ async function askAI(positions, cards, name, birth, question) {
     const data = await response.json();
 
     if (data.error) {
-      return "Ошибка при обращении к ИИ.";
+      return "Ошибка при обращении к серверу.";
     }
 
     return data.text;
   } catch (err) {
-    return "Сервер ИИ недоступен.";
+    return "Сервер недоступен.";
   }
 }
 
@@ -149,7 +149,7 @@ async function drawSpread(type) {
   html += `
     <div class="card loading-card" id="ai-loading">
       <div class="spinner"></div>
-      <div>Толкование ИИ: генерирую ответ...</div>
+      <div>Толкование карт: загузка ответа...</div>
     </div>
   `;
 
@@ -184,7 +184,7 @@ aiText = cleanAIText(aiText);
   // Добавляем итог ИИ
   document.getElementById("result").innerHTML += `
     <div class="card">
-      <h3>Ответ ИИ</h3>
+      <h3>Ответ </h3>
       <p>${aiText.replace(/\n/g, "<br>")}</p>
     </div>
   `;
