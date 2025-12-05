@@ -59,9 +59,12 @@ ${positions
 
     res.json({ text });
   } catch (err) {
-    console.error("AI ERROR:", err.response?.data || err.message);
-    res.status(500).json({ error: "AI backend error" });
-  }
+  console.error("AI ERROR:", err.response?.data || err.message || err);
+  res.status(500).json({
+    error: "AI backend error",
+    details: err.response?.data || err.message || err.toString(),
+  });
+}
 });
 
 const PORT = process.env.PORT || 3000;
