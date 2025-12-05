@@ -1,0 +1,115 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: #eee;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+.user-fields {
+  background: #222;
+  padding: 15px;
+  padding-right: 35px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.user-fields input,
+.user-fields textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: none;
+  background: #333;
+  color: white;
+}
+
+textarea {
+  height: 80px;
+}
+
+.buttons {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+button {
+  background: #6a00ff;
+  color: white;
+  padding: 10px 18px;
+  margin: 6px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #8f2dff;
+}
+
+.result .card {
+  background: #222;
+  padding: 12px;
+  border-radius: 10px;
+  margin: 10px 0;
+  border-left: 4px solid #6a00ff;
+}
+
+.card-pos {
+  font-weight: bold;
+  color: #9c7bff;
+}
+
+.card-name {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+textarea:focus {
+  outline: 2px solid #6a00ff;
+}
+
+/* Карточка загрузки ИИ */
+.loading-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid #444;
+  border-top-color: #9c7bff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Анимация спиннера */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Кнопки в состоянии загрузки */
+.buttons button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
