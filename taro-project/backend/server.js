@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const OpenAI = require("openai/index.js");
+const OpenAI = require("openai"); // <-- ВАЖНО: исправлено
 
 dotenv.config();
 
@@ -11,6 +11,11 @@ app.use(express.json());
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
+});
+
+// Тестовый маршрут — можно открыть: https://taroapp.onrender.com/ping
+app.get("/ping", (req, res) => {
+  res.send("Backend is alive!");
 });
 
 app.post("/tarot", async (req, res) => {
@@ -40,10 +45,10 @@ ${positions
 2. Подробное толкование каждой позиции и карты.
 3. Общий итог по раскладу и мягкий совет.
 
-Не предлагай дополнительных услуг и не пиши фраз вроде
+Не предлагай дополнительных услуг и не пиши фразы вроде:
 «если хотите, могу…», «если нужно, я могу…» и т.п.
-Просто закончи текст итоговым советом.
-    `;
+Просто закончи советом.
+`;
 
     const response = await client.responses.create({
       model: "gpt-5-nano",
@@ -54,13 +59,12 @@ ${positions
 
     res.json({ text });
   } catch (err) {
-    console.error("AI ERROR:", err);
+    console.error("AI ERROR:", err.response?.data || err.message);
     res.status(500).json({ error: "AI backend error" });
   }
 });
 
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
