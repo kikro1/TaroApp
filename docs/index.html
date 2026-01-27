@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tarot — Онлайн расклады</title>
+  <title data-i18n="title">Tarot — Онлайн расклады</title>
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -11,38 +11,63 @@
 <body>
 
   <div class="container">
-    <h1>🔮 Tarot — Онлайн расклад</h1>
 
-    <p>Введите данные и выберите расклад, чтобы получить толкование карт и ответ.</p>
+    <!-- Панель настроек -->
+    <div class="settings-panel">
+
+      <div class="language-switch">
+        <label for="langSelect" data-i18n="langLabel">Language / Язык:</label>
+        <select id="langSelect" onchange="changeLanguage()">
+          <option value="ru" selected>Русский</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+
+      <div class="theme-switch">
+        <label for="themeToggle" data-i18n="themeLabel">Тема:</label>
+        <button id="themeToggle" onclick="toggleTheme()">🌙 / ☀️</button>
+      </div>
+
+    </div>
+
+    <h1 data-i18n="mainTitle">🔮 Tarot — Онлайн расклад</h1>
+
+    <p data-i18n="description">Введите данные и выберите расклад, чтобы получить толкование карт и ответ.</p>
 
     <!-- Форма пользователя -->
     <div class="user-fields">
-      <label>Ваше имя:</label>
-      <input id="userName" type="text" placeholder="Введите имя" />
 
-      <label>Дата рождения:</label>
+      <label data-i18n="nameLabel">Ваше имя:</label>
+      <input id="userName" type="text" data-i18n-placeholder="namePh" placeholder="Введите имя" />
+
+      <label data-i18n="birthLabel">Дата рождения:</label>
       <input id="birthDate" type="date" />
 
-      <label>Ваш вопрос:</label>
-      <textarea id="userQuestion" placeholder="Например: Что ждёт меня в отношениях?"></textarea>
+      <label data-i18n="questionLabel">Ваш вопрос:</label>
+      <textarea id="userQuestion" data-i18n-placeholder="questionPh"
+        placeholder="Например: Что ждёт меня в отношениях?"></textarea>
+
     </div>
 
     <!-- Кнопки раскладов -->
-    <h2>Выберите расклад</h2>
+    <h2 data-i18n="chooseSpread">Выберите расклад</h2>
+
     <div class="buttons">
-      <button onclick="drawSpread('one')">1 карта</button>
-      <button onclick="drawSpread('three')">3 карты</button>
-      <button onclick="drawSpread('love')">Любовный расклад</button>
-      <button onclick="drawSpread('path')">Путь и совет</button>
-      <button onclick="drawSpread('celtic')">Кельтский крест</button>
-      <button onclick="drawSpread('yesno')">Да / Нет</button>
+      <button onclick="drawSpread('one')" data-i18n="btnOne">1 карта</button>
+      <button onclick="drawSpread('three')" data-i18n="btnThree">3 карты</button>
+      <button onclick="drawSpread('love')" data-i18n="btnLove">Любовный расклад</button>
+      <button onclick="drawSpread('path')" data-i18n="btnPath">Путь и совет</button>
+      <button onclick="drawSpread('celtic')" data-i18n="btnCeltic">Кельтский крест</button>
+      <button onclick="drawSpread('yesno')" data-i18n="btnYesNo">Да / Нет</button>
     </div>
 
     <!-- Результат -->
     <div id="result" class="result"></div>
+
   </div>
 
   <script src="cards.js"></script>
+  <script src="i18n.js"></script>
   <script src="script.js"></script>
 
 </body>

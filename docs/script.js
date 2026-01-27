@@ -74,10 +74,11 @@ async function askAI(positions, cards, name, birth, question) {
 // ----------------------
 // ОСНОВНАЯ ФУНКЦИЯ РАСКЛАДА
 // ----------------------
+
 function cleanAIText(text) {
-  // убираем предложения, начинающиеся с "Если хотите"
   return text.replace(/Если хотите[^.?!]*[.?!]/gi, "").trim();
 }
+
 async function drawSpread(type) {
   const userName = document.getElementById("userName").value || "Не указано";
   const birthDate = document.getElementById("birthDate").value || "Не указано";
@@ -97,40 +98,25 @@ async function drawSpread(type) {
   const shuffled = shuffle([...tarotCards]);
   const selected = shuffled.slice(0, count);
 
-  const labelsMap = {
-    one: ["Ответ / совет"],
-    three: ["Прошлое", "Настоящее", "Будущее"],
-    love: ["Вы", "Партнёр", "Связь", "Проблемы", "Сильные стороны", "Будущее"],
-    path: ["Где вы", "Препятствия", "Ресурсы", "Совет", "Итог"],
-    celtic: [
-      "Суть", "Препятствие", "Основа",
-      "Прошлое", "Сознательное", "Будущее",
-      "Вы", "Окружение", "Страхи", "Итог",
-    ],
-    yesno: ["Карта"],
-  };
+  const labelsMap = translations[currentLang].spreadLabels;
 
   const positions = labelsMap[type];
 
-  // Подготовка карт (учёт перевёрнутости)
   const preparedCards = selected.map((card) => {
     const rev = reversed();
     return {
-      name: rev ? card.name + " (перевёрнутая)" : card.name,
+      name: rev ? card.name + translations[currentLang].reversed : card.name,
       meaning: rev ? card.reversed : card.upright,
     };
   });
 
 
-
-  // РЕНДЕРИМ КАРТЫ
-
   let html = `
-    <h2>Результат расклада</h2>
+    <h2>${translations[currentLang].resultTitle}</h2>
 
-    <p><strong>Имя:</strong> ${userName}</p>
-    <p><strong>Дата рождения:</strong> ${birthDate}</p>
-    <p><strong>Вопрос:</strong> ${userQuestion}</p>
+    <p><strong>${translations[currentLang].name}:</strong> ${userName}</p>
+    <p><strong>${translations[currentLang].birth}:</strong> ${birthDate}</p>
+    <p><strong>${translations[currentLang].question}:</strong> ${userQuestion}</p>
   `;
 
   preparedCards.forEach((c, i) => {
@@ -143,49 +129,129 @@ async function drawSpread(type) {
     `;
   });
 
-
-  // ДОБАВЛЯЕМ КАРТУ ЗАГРУЗКИ
-
   html += `
     <div class="card loading-card" id="ai-loading">
       <div class="spinner"></div>
-      <div>Толкование карт: загузка ответа...</div>
+      <div>${translations[currentLang].loading}</div>
     </div>
   `;
 
   document.getElementById("result").innerHTML = html;
 
-
-  // Включаем состояние загрузки
   setLoading(true);
 
-
-  // Запрашиваем ответ ИИ
   let aiText = await askAI(
-  positions,
-  preparedCards,
-  userName,
-  birthDate,
-  userQuestion
-);
+    positions,
+    preparedCards,
+    userName,
+    birthDate,
+    userQuestion
+  );
 
-aiText = cleanAIText(aiText);
+  aiText = cleanAIText(aiText);
 
-
-  // Выключаем состояние загрузки
   setLoading(false);
 
-
-  // Удаляем блок загрузки
   const load = document.getElementById("ai-loading");
   if (load) load.remove();
 
-
-  // Добавляем итог ИИ
   document.getElementById("result").innerHTML += `
     <div class="card">
-      <h3>Ответ </h3>
+      <h3>${translations[currentLang].finalAnswer}</h3>
       <p>${aiText.replace(/\n/g, "<br>")}</p>
     </div>
   `;
 }
+
+
+const translations = {
+  ru: {
+    title: "Tarot — Онлайн расклады",
+    langLabel: "Язык:",
+    themeLabel: "Тема:",
+    mainTitle: "🔮 Tarot — Онлайн расклад",
+    description: "Введите данные и выберите расклад, чтобы получить толкование карт и ответ.",
+    nameLabel: "Ваше имя:",
+    namePh: "Введите имя",
+    birthLabel: "Дата рождения:",
+    questionLabel: "Ваш вопрос:",
+    questionPh: "Например: Что ждёт меня в отношениях?",
+    chooseSpread: "Выберите расклад",
+    btnOne: "1 карта",
+    btnThree: "3 карты",
+    btnLove: "Любовный расклад",
+    btnPath: "Путь и совет",
+    btnCeltic: "Кельтский крест",
+    btnYesNo: "Да / Нет",
+  },
+
+  en: {
+    title: "Tarot — Online Readings",
+    langLabel: "Language:",
+    themeLabel: "Theme:",
+    mainTitle: "🔮 Tarot — Online Reading",
+    description: "Enter your data and choose a spread to receive an interpretation and answer.",
+    nameLabel: "Your name:",
+    namePh: "Enter your name",
+    birthLabel: "Date of birth:",
+    questionLabel: "Your question:",
+    questionPh: "Example: What awaits me in relationships?",
+    chooseSpread: "Choose a spread",
+    btnOne: "1 card",
+    btnThree: "3 cards",
+    btnLove: "Love spread",
+    btnPath: "Path & advice",
+    btnCeltic: "Celtic cross",
+    btnYesNo: "Yes / No",
+  }
+};
+
+
+// ------------------------
+// Применение перевода
+// ------------------------
+function applyTranslations() {
+  const lang = localStorage.getItem("siteLang") || "ru";
+  const dict = translations[lang];
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (dict[key]) el.innerHTML = dict[key];
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const key = el.getAttribute("data-i18n-placeholder");
+    if (dict[key]) el.placeholder = dict[key];
+  });
+
+  document.title = dict["title"];
+}
+
+document.addEventListener("DOMContentLoaded", applyTranslations);
+
+
+function changeLanguage() {
+  const lang = document.getElementById("langSelect").value;
+  localStorage.setItem("siteLang", lang);
+  applyTranslations(); // мгновенный перевод
+}
+
+function toggleTheme() {
+  const body = document.body;
+  const isDark = body.classList.toggle("dark-theme");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const savedLang = localStorage.getItem("siteLang") || "ru";
+  const savedTheme = localStorage.getItem("theme");
+
+  const langSelect = document.getElementById("langSelect");
+  langSelect.value = savedLang;
+
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark-theme");
+  }
+
+  applyTranslations();
+});
