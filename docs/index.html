@@ -3,68 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-i18n="title">Tarot — Онлайн расклады</title>
+  <title data-i18n="title">Tarot - Онлайн расклады</title>
 
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+  <div class="page-glow" aria-hidden="true"></div>
 
-  <div class="container">
+  <main class="container">
 
-    <!-- Панель настроек -->
-    <div class="settings-panel">
+    <section class="hero" aria-labelledby="mainTitle">
+      <div class="settings-panel" aria-label="Настройки">
 
-      <div class="language-switch">
-        <label for="langSelect" data-i18n="langLabel">Language / Язык:</label>
-        <select id="langSelect" onchange="changeLanguage()">
-          <option value="ru" selected>Русский</option>
-          <option value="en">English</option>
-        </select>
+        <div class="language-switch">
+          <label for="langSelect" data-i18n="langLabel">Язык:</label>
+          <select id="langSelect">
+            <option value="ru" selected>Русский</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+
+        <div class="theme-switch">
+          <span data-i18n="themeLabel">Тема:</span>
+          <button id="themeToggle" class="ghost-button" type="button" aria-pressed="false">
+            <span class="theme-icon" aria-hidden="true">☾</span>
+            <span data-i18n="themeToggle">Сменить</span>
+          </button>
+        </div>
+
       </div>
 
-      <div class="theme-switch">
-        <label for="themeToggle" data-i18n="themeLabel">Тема:</label>
-        <button id="themeToggle" onclick="toggleTheme()">🌙 / ☀️</button>
+      <p class="eyebrow" data-i18n="eyebrow">Интуитивный онлайн-расклад</p>
+      <h1 id="mainTitle" data-i18n="mainTitle">Tarot — Онлайн расклад</h1>
+
+      <p class="description" data-i18n="description">Введите данные и выберите расклад, чтобы получить толкование карт и ответ.</p>
+
+      <div class="hero-deck" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
-
-    </div>
-
-    <h1 data-i18n="mainTitle">🔮 Tarot — Онлайн расклад</h1>
-
-    <p data-i18n="description">Введите данные и выберите расклад, чтобы получить толкование карт и ответ.</p>
+    </section>
 
     <!-- Форма пользователя -->
-    <div class="user-fields">
+    <section class="panel user-fields" aria-labelledby="detailsTitle">
+      <h2 id="detailsTitle" data-i18n="detailsTitle">Данные для расклада</h2>
 
-      <label data-i18n="nameLabel">Ваше имя:</label>
+      <label for="userName" data-i18n="nameLabel">Ваше имя</label>
       <input id="userName" type="text" data-i18n-placeholder="namePh" placeholder="Введите имя" />
 
-      <label data-i18n="birthLabel">Дата рождения:</label>
+      <label for="birthDate" data-i18n="birthLabel">Дата рождения</label>
       <input id="birthDate" type="date" />
 
-      <label data-i18n="questionLabel">Ваш вопрос:</label>
+      <label for="userQuestion" data-i18n="questionLabel">Ваш вопрос</label>
       <textarea id="userQuestion" data-i18n-placeholder="questionPh"
         placeholder="Например: Что ждёт меня в отношениях?"></textarea>
 
-    </div>
+    </section>
 
     <!-- Кнопки раскладов -->
-    <h2 data-i18n="chooseSpread">Выберите расклад</h2>
+    <section class="panel spread-panel" aria-labelledby="spreadTitle">
+      <h2 id="spreadTitle" data-i18n="chooseSpread">Выберите расклад</h2>
 
-    <div class="buttons">
-      <button onclick="drawSpread('one')" data-i18n="btnOne">1 карта</button>
-      <button onclick="drawSpread('three')" data-i18n="btnThree">3 карты</button>
-      <button onclick="drawSpread('love')" data-i18n="btnLove">Любовный расклад</button>
-      <button onclick="drawSpread('path')" data-i18n="btnPath">Путь и совет</button>
-      <button onclick="drawSpread('celtic')" data-i18n="btnCeltic">Кельтский крест</button>
-      <button onclick="drawSpread('yesno')" data-i18n="btnYesNo">Да / Нет</button>
-    </div>
+      <div class="buttons">
+        <button type="button" data-spread="one" data-i18n="btnOne">1 карта</button>
+        <button type="button" data-spread="three" data-i18n="btnThree">3 карты</button>
+        <button type="button" data-spread="love" data-i18n="btnLove">Любовный расклад</button>
+        <button type="button" data-spread="path" data-i18n="btnPath">Путь и совет</button>
+        <button type="button" data-spread="celtic" data-i18n="btnCeltic">Кельтский крест</button>
+        <button type="button" data-spread="yesno" data-i18n="btnYesNo">Да / Нет</button>
+      </div>
+    </section>
 
     <!-- Результат -->
-    <div id="result" class="result"></div>
+    <section id="result" class="result" aria-live="polite"></section>
 
-  </div>
+  </main>
 
   <script src="cards.js"></script>
   <script src="script.js"></script>
