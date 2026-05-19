@@ -48,6 +48,30 @@ const MINOR_SUITS_RU = {
   Swords: "Мечей",
   Pentacles: "Пентаклей",
 };
+const MAJOR_VISUAL_META = {
+  "0 The Fool": { key: "fool" },
+  "I The Magician": { key: "magician" },
+  "II The High Priestess": { key: "priestess" },
+  "III The Empress": { key: "empress" },
+  "IV The Emperor": { key: "emperor" },
+  "V The Hierophant": { key: "hierophant" },
+  "VI The Lovers": { key: "lovers" },
+  "VII The Chariot": { key: "chariot" },
+  "VIII Strength": { key: "strength" },
+  "IX The Hermit": { key: "hermit" },
+  "X Wheel of Fortune": { key: "fortune" },
+  "XI Justice": { key: "justice" },
+  "XII The Hanged Man": { key: "hanged" },
+  "XIII Death": { key: "death" },
+  "XIV Temperance": { key: "temperance" },
+  "XV The Devil": { key: "devil" },
+  "XVI The Tower": { key: "tower" },
+  "XVII The Star": { key: "star" },
+  "XVIII The Moon": { key: "moon" },
+  "XIX The Sun": { key: "sun" },
+  "XX Judgement": { key: "judgement" },
+  "XXI The World": { key: "world" },
+};
 
 const translations = {
   ru: {
@@ -55,10 +79,13 @@ const translations = {
     langLabel: "Язык:",
     themeLabel: "Тема:",
     themeToggle: "Сменить",
+    readingLink: "Расклад",
+    galleryLink: "Галерея карт",
     eyebrow: "Интуитивный онлайн-расклад",
     mainTitle: "Tarot — Онлайн расклад",
     description: "Введите данные и выберите расклад, чтобы получить толкование карт и ответ.",
     detailsTitle: "Данные для расклада",
+    detailsSubtitle: "Можно оставить поля пустыми, если нужен общий расклад.",
     nameLabel: "Ваше имя",
     namePh: "Введите имя",
     birthLabel: "Дата рождения",
@@ -71,6 +98,13 @@ const translations = {
     btnPath: "Путь и совет",
     btnCeltic: "Кельтский крест",
     btnYesNo: "Да / Нет",
+    btnOneDesc: "Быстрый фокус",
+    btnThreeDesc: "Прошлое, настоящее, будущее",
+    btnLoveDesc: "Чувства и динамика",
+    btnPathDesc: "Опора и следующий шаг",
+    btnCelticDesc: "Подробный разбор",
+    btnYesNoDesc: "Короткое решение",
+    spreadSubtitle: "Короткий ответ, глубокий разбор или совет по ситуации.",
     resultTitle: "Ваш расклад",
     name: "Имя",
     birth: "Дата рождения",
@@ -126,10 +160,13 @@ const translations = {
     langLabel: "Language:",
     themeLabel: "Theme:",
     themeToggle: "Switch",
+    readingLink: "Reading",
+    galleryLink: "Card gallery",
     eyebrow: "Intuitive online reading",
     mainTitle: "Tarot — Online Reading",
     description: "Enter your data and choose a spread to receive an interpretation and answer.",
     detailsTitle: "Reading details",
+    detailsSubtitle: "You can leave fields empty for a general reading.",
     nameLabel: "Your name",
     namePh: "Enter your name",
     birthLabel: "Date of birth",
@@ -142,6 +179,13 @@ const translations = {
     btnPath: "Path & advice",
     btnCeltic: "Celtic cross",
     btnYesNo: "Yes / No",
+    btnOneDesc: "Quick focus",
+    btnThreeDesc: "Past, present, future",
+    btnLoveDesc: "Feelings and dynamic",
+    btnPathDesc: "Support and next step",
+    btnCelticDesc: "Detailed reading",
+    btnYesNoDesc: "Short decision",
+    spreadSubtitle: "Choose a quick answer, a deeper reading, or advice for the situation.",
     resultTitle: "Your spread",
     name: "Name",
     birth: "Date of birth",
@@ -283,24 +327,29 @@ function getLocalizedCardName(baseName, reversed, lang) {
 
 function getCardVisualMeta(cardName) {
   const normalizedName = String(cardName).toLowerCase();
+  const majorMeta = MAJOR_VISUAL_META[cardName];
+
+  if (majorMeta) {
+    return { suit: "major", ...majorMeta };
+  }
 
   if (normalizedName.includes("wand")) {
-    return { suit: "wands", symbol: "✦" };
+    return { suit: "wands", key: "wands" };
   }
 
   if (normalizedName.includes("cup")) {
-    return { suit: "cups", symbol: "◌" };
+    return { suit: "cups", key: "cups" };
   }
 
   if (normalizedName.includes("sword")) {
-    return { suit: "swords", symbol: "◇" };
+    return { suit: "swords", key: "swords" };
   }
 
   if (normalizedName.includes("pentacle")) {
-    return { suit: "pentacles", symbol: "✧" };
+    return { suit: "pentacles", key: "pentacles" };
   }
 
-  return { suit: "major", symbol: "☉" };
+  return { suit: "major", key: "major" };
 }
 
 function renderCardVisual(card, index, dict) {
@@ -311,8 +360,11 @@ function renderCardVisual(card, index, dict) {
   const imageHtml = image
     ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(`${dict.cardImageAlt}: ${card.name}`)}" loading="lazy" />`
     : `
-      <div class="tarot-art" data-suit="${escapeHtml(visual.suit)}" aria-hidden="true">
-        <span class="tarot-art-symbol">${escapeHtml(visual.symbol)}</span>
+      <div class="tarot-art" data-suit="${escapeHtml(visual.suit)}" data-card="${escapeHtml(visual.key)}" aria-hidden="true">
+        <span class="tarot-art-roman">${escapeHtml(card.baseName.split(" ")[0])}</span>
+        <span class="tarot-art-rays"></span>
+        <span class="tarot-art-symbol"></span>
+        <span class="tarot-art-mark"></span>
         <span class="tarot-art-orbit"></span>
         <span class="tarot-art-title">${escapeHtml(card.baseName)}</span>
       </div>
@@ -535,7 +587,7 @@ function toggleTheme() {
   const isDark = document.body.classList.toggle("dark-theme");
   localStorage.setItem("theme", isDark ? "dark" : "light");
   document.getElementById("themeToggle")?.setAttribute("aria-pressed", String(isDark));
-  document.querySelector(".theme-icon").textContent = isDark ? "☀" : "☾";
+  document.querySelector(".theme-icon")?.classList.toggle("is-dark", isDark);
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -560,9 +612,9 @@ window.addEventListener("DOMContentLoaded", () => {
     "aria-pressed",
     String(document.body.classList.contains("dark-theme"))
   );
-  document.querySelector(".theme-icon").textContent = document.body.classList.contains("dark-theme")
-    ? "☀"
-    : "☾";
+  document
+    .querySelector(".theme-icon")
+    ?.classList.toggle("is-dark", document.body.classList.contains("dark-theme"));
 
   document.querySelectorAll("[data-spread]").forEach((button) => {
     button.addEventListener("click", () => drawSpread(button.dataset.spread));

@@ -34,6 +34,11 @@
 
       </div>
 
+      <nav class="page-nav" aria-label="Навигация">
+        <a class="nav-link is-active" href="index.html" data-i18n="readingLink">Расклад</a>
+        <a class="nav-link" href="gallery.html" data-i18n="galleryLink">Галерея карт</a>
+      </nav>
+
       <p class="eyebrow" data-i18n="eyebrow">Интуитивный онлайн-расклад</p>
       <h1 id="mainTitle" data-i18n="mainTitle">Tarot — Онлайн расклад</h1>
 
@@ -48,7 +53,13 @@
 
     <!-- Форма пользователя -->
     <section class="panel user-fields" aria-labelledby="detailsTitle">
-      <h2 id="detailsTitle" data-i18n="detailsTitle">Данные для расклада</h2>
+      <div class="section-heading">
+        <span class="step-badge">01</span>
+        <div>
+          <h2 id="detailsTitle" data-i18n="detailsTitle">Данные для расклада</h2>
+          <p data-i18n="detailsSubtitle">Можно оставить поля пустыми, если нужен общий расклад.</p>
+        </div>
+      </div>
 
       <label for="userName" data-i18n="nameLabel">Ваше имя</label>
       <input id="userName" type="text" data-i18n-placeholder="namePh" placeholder="Введите имя" />
@@ -64,15 +75,39 @@
 
     <!-- Кнопки раскладов -->
     <section class="panel spread-panel" aria-labelledby="spreadTitle">
-      <h2 id="spreadTitle" data-i18n="chooseSpread">Выберите расклад</h2>
+      <div class="section-heading">
+        <span class="step-badge">02</span>
+        <div>
+          <h2 id="spreadTitle" data-i18n="chooseSpread">Выберите расклад</h2>
+          <p data-i18n="spreadSubtitle">Короткий ответ, глубокий разбор или совет по ситуации.</p>
+        </div>
+      </div>
 
       <div class="buttons">
-        <button type="button" data-spread="one" data-i18n="btnOne">1 карта</button>
-        <button type="button" data-spread="three" data-i18n="btnThree">3 карты</button>
-        <button type="button" data-spread="love" data-i18n="btnLove">Любовный расклад</button>
-        <button type="button" data-spread="path" data-i18n="btnPath">Путь и совет</button>
-        <button type="button" data-spread="celtic" data-i18n="btnCeltic">Кельтский крест</button>
-        <button type="button" data-spread="yesno" data-i18n="btnYesNo">Да / Нет</button>
+        <button type="button" data-spread="one">
+          <span data-i18n="btnOne">1 карта</span>
+          <small data-i18n="btnOneDesc">Быстрый фокус</small>
+        </button>
+        <button type="button" data-spread="three">
+          <span data-i18n="btnThree">3 карты</span>
+          <small data-i18n="btnThreeDesc">Прошлое, настоящее, будущее</small>
+        </button>
+        <button type="button" data-spread="love">
+          <span data-i18n="btnLove">Любовный расклад</span>
+          <small data-i18n="btnLoveDesc">Чувства и динамика</small>
+        </button>
+        <button type="button" data-spread="path">
+          <span data-i18n="btnPath">Путь и совет</span>
+          <small data-i18n="btnPathDesc">Опора и следующий шаг</small>
+        </button>
+        <button type="button" data-spread="celtic">
+          <span data-i18n="btnCeltic">Кельтский крест</span>
+          <small data-i18n="btnCelticDesc">Подробный разбор</small>
+        </button>
+        <button type="button" data-spread="yesno">
+          <span data-i18n="btnYesNo">Да / Нет</span>
+          <small data-i18n="btnYesNoDesc">Короткое решение</small>
+        </button>
       </div>
     </section>
 

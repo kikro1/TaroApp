@@ -48,6 +48,30 @@ const MINOR_SUITS_RU = {
   Swords: "Мечей",
   Pentacles: "Пентаклей",
 };
+const MAJOR_VISUAL_META = {
+  "0 The Fool": { key: "fool", symbol: "✦" },
+  "I The Magician": { key: "magician", symbol: "∞" },
+  "II The High Priestess": { key: "priestess", symbol: "☾" },
+  "III The Empress": { key: "empress", symbol: "✿" },
+  "IV The Emperor": { key: "emperor", symbol: "♜" },
+  "V The Hierophant": { key: "hierophant", symbol: "✢" },
+  "VI The Lovers": { key: "lovers", symbol: "♡" },
+  "VII The Chariot": { key: "chariot", symbol: "⚑" },
+  "VIII Strength": { key: "strength", symbol: "♌" },
+  "IX The Hermit": { key: "hermit", symbol: "✺" },
+  "X Wheel of Fortune": { key: "fortune", symbol: "✹" },
+  "XI Justice": { key: "justice", symbol: "⚖" },
+  "XII The Hanged Man": { key: "hanged", symbol: "⌄" },
+  "XIII Death": { key: "death", symbol: "✣" },
+  "XIV Temperance": { key: "temperance", symbol: "♒" },
+  "XV The Devil": { key: "devil", symbol: "♆" },
+  "XVI The Tower": { key: "tower", symbol: "⚡" },
+  "XVII The Star": { key: "star", symbol: "✶" },
+  "XVIII The Moon": { key: "moon", symbol: "☽" },
+  "XIX The Sun": { key: "sun", symbol: "☀" },
+  "XX Judgement": { key: "judgement", symbol: "✧" },
+  "XXI The World": { key: "world", symbol: "◎" },
+};
 
 const translations = {
   ru: {
@@ -55,10 +79,13 @@ const translations = {
     langLabel: "Язык:",
     themeLabel: "Тема:",
     themeToggle: "Сменить",
+    readingLink: "Расклад",
+    galleryLink: "Галерея карт",
     eyebrow: "Интуитивный онлайн-расклад",
     mainTitle: "Tarot — Онлайн расклад",
     description: "Введите данные и выберите расклад, чтобы получить толкование карт и ответ.",
     detailsTitle: "Данные для расклада",
+    detailsSubtitle: "Можно оставить поля пустыми, если нужен общий расклад.",
     nameLabel: "Ваше имя",
     namePh: "Введите имя",
     birthLabel: "Дата рождения",
@@ -71,6 +98,13 @@ const translations = {
     btnPath: "Путь и совет",
     btnCeltic: "Кельтский крест",
     btnYesNo: "Да / Нет",
+    btnOneDesc: "Быстрый фокус",
+    btnThreeDesc: "Прошлое, настоящее, будущее",
+    btnLoveDesc: "Чувства и динамика",
+    btnPathDesc: "Опора и следующий шаг",
+    btnCelticDesc: "Подробный разбор",
+    btnYesNoDesc: "Короткое решение",
+    spreadSubtitle: "Короткий ответ, глубокий разбор или совет по ситуации.",
     resultTitle: "Ваш расклад",
     name: "Имя",
     birth: "Дата рождения",
@@ -126,10 +160,13 @@ const translations = {
     langLabel: "Language:",
     themeLabel: "Theme:",
     themeToggle: "Switch",
+    readingLink: "Reading",
+    galleryLink: "Card gallery",
     eyebrow: "Intuitive online reading",
     mainTitle: "Tarot — Online Reading",
     description: "Enter your data and choose a spread to receive an interpretation and answer.",
     detailsTitle: "Reading details",
+    detailsSubtitle: "You can leave fields empty for a general reading.",
     nameLabel: "Your name",
     namePh: "Enter your name",
     birthLabel: "Date of birth",
@@ -142,6 +179,13 @@ const translations = {
     btnPath: "Path & advice",
     btnCeltic: "Celtic cross",
     btnYesNo: "Yes / No",
+    btnOneDesc: "Quick focus",
+    btnThreeDesc: "Past, present, future",
+    btnLoveDesc: "Feelings and dynamic",
+    btnPathDesc: "Support and next step",
+    btnCelticDesc: "Detailed reading",
+    btnYesNoDesc: "Short decision",
+    spreadSubtitle: "Choose a quick answer, a deeper reading, or advice for the situation.",
     resultTitle: "Your spread",
     name: "Name",
     birth: "Date of birth",
@@ -283,24 +327,29 @@ function getLocalizedCardName(baseName, reversed, lang) {
 
 function getCardVisualMeta(cardName) {
   const normalizedName = String(cardName).toLowerCase();
+  const majorMeta = MAJOR_VISUAL_META[cardName];
+
+  if (majorMeta) {
+    return { suit: "major", ...majorMeta };
+  }
 
   if (normalizedName.includes("wand")) {
-    return { suit: "wands", symbol: "✦" };
+    return { suit: "wands", key: "wands", symbol: "✦" };
   }
 
   if (normalizedName.includes("cup")) {
-    return { suit: "cups", symbol: "◌" };
+    return { suit: "cups", key: "cups", symbol: "◌" };
   }
 
   if (normalizedName.includes("sword")) {
-    return { suit: "swords", symbol: "◇" };
+    return { suit: "swords", key: "swords", symbol: "◇" };
   }
 
   if (normalizedName.includes("pentacle")) {
-    return { suit: "pentacles", symbol: "✧" };
+    return { suit: "pentacles", key: "pentacles", symbol: "✧" };
   }
 
-  return { suit: "major", symbol: "☉" };
+  return { suit: "major", key: "major", symbol: "☉" };
 }
 
 function renderCardVisual(card, index, dict) {
@@ -311,8 +360,11 @@ function renderCardVisual(card, index, dict) {
   const imageHtml = image
     ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(`${dict.cardImageAlt}: ${card.name}`)}" loading="lazy" />`
     : `
-      <div class="tarot-art" data-suit="${escapeHtml(visual.suit)}" aria-hidden="true">
+      <div class="tarot-art" data-suit="${escapeHtml(visual.suit)}" data-card="${escapeHtml(visual.key)}" aria-hidden="true">
+        <span class="tarot-art-roman">${escapeHtml(card.baseName.split(" ")[0])}</span>
+        <span class="tarot-art-rays"></span>
         <span class="tarot-art-symbol">${escapeHtml(visual.symbol)}</span>
+        <span class="tarot-art-mark"></span>
         <span class="tarot-art-orbit"></span>
         <span class="tarot-art-title">${escapeHtml(card.baseName)}</span>
       </div>
