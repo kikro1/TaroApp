@@ -663,27 +663,27 @@ function buildLocalInterpretation(payload, dict) {
 
       if (!isRu) {
         const orientationText = isReversed
-          ? "Here the card speaks through its shadow: delay, doubt, fatigue, or an attempt to control too much."
-          : "Here the card acts as an active current in the spread: a resource, a direction, and something you can lean on.";
+          ? "The card points to a delay, doubt, or inner block that needs attention."
+          : "The card points to an active resource and a direction you can lean on.";
 
         return `${position}
 ${cardName}
 
 ${meaning}
 
-${orientationText} In this position, it shows what needs attention and how the situation is moving beneath the surface. Notice both the outer events and your inner state, because the card points to where the answer is already forming.`;
+${orientationText} In this position, it shows what matters now and where the answer is already forming.`;
       }
 
       const orientationText = isReversed
-        ? "Здесь карта звучит как тень или внутренний блок: энергия есть, но она может проявляться через задержку, сомнение, усталость или попытку всё контролировать."
-        : "Здесь карта звучит как активная энергия расклада: она показывает ресурс, направление и то, на что стоит опереться.";
+        ? "Карта показывает задержку, сомнение или внутренний блок, который требует внимания."
+        : "Карта показывает активный ресурс и направление, на которое можно опереться.";
 
       return `${position}
 ${cardName}
 
 ${meaning}
 
-${orientationText} В этой позиции карта помогает увидеть, какая тема сейчас требует внимания и как она влияет на вопрос. Смотри не только на событие снаружи, но и на своё состояние: именно оно подсказывает, где ситуация раскрывается, а где пока сопротивляется.`;
+${orientationText} В этой позиции важно увидеть не только внешнее событие, но и своё состояние: там уже намечается ответ.`;
     })
     .join("\n\n");
 
@@ -696,18 +696,14 @@ ${orientationText} В этой позиции карта помогает уви
 Short answer
 The main focus for "${question}" is ${firstCardName}. This card sets the tone of the spread: ${firstMeaning}
 
-This is not just a separate sign. It shows where the main knot of the situation is: feelings, expectations, choice, fatigue, or the need to see the truth more calmly.
-
 Card interpretation
 ${cardLines}
 
 Overall result
-The cards form a story about where energy is already moving and where it is stuck. The spread asks you to notice the lesson inside the situation, not only the visible outcome.
-
-Taken together, the cards suggest that clarity will come through one honest step rather than pressure. Pay attention to the main motif and choose the action that makes the situation cleaner.
+The cards show where energy is moving and where it is stuck. The main task is to notice the lesson of the situation and choose one honest step instead of forcing an immediate outcome.
 
 Advice
-Do not try to solve everything at once. Choose one action that brings more truth and calm: ask directly, admit what you want, release excess control, or give yourself time.
+Do not try to solve everything at once. Choose one action that brings more truth and calm: ask directly, admit what you want, release control, or give yourself time.
 `.trim();
   }
 
@@ -715,18 +711,14 @@ Do not try to solve everything at once. Choose one action that brings more truth
 Краткий ответ
 Главный акцент по вопросу «${question}» сейчас связан с картой ${firstCardName}. Она задаёт тон всему раскладу: ${firstMeaning}
 
-Это не просто отдельный знак, а центральная энергия ситуации. Она показывает, где сейчас находится главный узел: в чувствах, ожиданиях, выборе, усталости или необходимости увидеть правду спокойнее.
-
 Толкование карт
 ${cardLines}
 
 Общий итог
-Карты складываются в историю о том, где энергия уже движется, а где она застревает. В раскладе важно не искать мгновенный приговор, а увидеть, какой урок ситуация просит пройти и какой ресурс уже есть внутри.
-
-Если смотреть на расклад целиком, он советует не торопить развязку силой. Лучше заметить главный мотив карт, признать свои настоящие чувства и сделать шаг, который возвращает тебе ясность.
+Карты показывают, где энергия уже движется, а где она застревает. Сейчас важнее не искать жёсткий приговор, а увидеть главный урок ситуации и ближайший честный шаг.
 
 Совет
-Сейчас лучше не распыляться. Выбери одно действие, которое делает ситуацию честнее и спокойнее: задать прямой вопрос, признать своё желание, отпустить лишний контроль или дать себе время. Именно этот небольшой шаг откроет больше, чем попытка сразу решить всё.
+Не пытайся решить всё сразу. Выбери одно действие, которое делает ситуацию честнее и спокойнее: задать прямой вопрос, признать своё желание, отпустить лишний контроль или дать себе время.
 `.trim();
 }
 
