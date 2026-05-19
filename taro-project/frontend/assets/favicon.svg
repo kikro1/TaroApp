@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Tarot">
+  <defs>
+    <linearGradient id="bg" x1="8" y1="5" x2="58" y2="61" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2b1724"/>
+      <stop offset="0.48" stop-color="#7a2f26"/>
+      <stop offset="1" stop-color="#e6a24e"/>
+    </linearGradient>
+    <linearGradient id="card" x1="20" y1="13" x2="45" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff8e8"/>
+      <stop offset="1" stop-color="#ffd7a0"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#180b12" flood-opacity="0.42"/>
+    </filter>
+  </defs>
+
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <circle cx="50" cy="12" r="10" fill="#ffd18a" opacity="0.22"/>
+  <path d="M48 9a8 8 0 1 0 5.8 13.5 10 10 0 1 1-5.8-13.5Z" fill="#fff2bd"/>
+
+  <g filter="url(#shadow)">
+    <rect x="18" y="12" width="29" height="42" rx="6" fill="url(#card)" stroke="#fff3cd" stroke-width="2"/>
+    <rect x="22" y="16" width="21" height="34" rx="4" fill="none" stroke="#8f2f1e" stroke-width="1.5" opacity="0.55"/>
+    <path d="M32.5 21 35 28l7 2.5-7 2.5-2.5 7-2.5-7-7-2.5 7-2.5 2.5-7Z" fill="#b5472d"/>
+    <circle cx="32.5" cy="30.5" r="4.2" fill="#ffd18a" stroke="#8f2f1e" stroke-width="1"/>
+    <path d="M26 43h13" stroke="#8f2f1e" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <path d="M12 48c5-3 10-3 15 0 5 3 10 3 15 0" fill="none" stroke="#fff2bd" stroke-width="2" stroke-linecap="round" opacity="0.78"/>
+</svg>

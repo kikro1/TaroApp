@@ -649,11 +649,13 @@ button:hover:not(:disabled) {
 .tarot-art {
   position: relative;
   overflow: hidden;
-  color: #fff7e9;
+  color: #fff2d8;
   background:
-    radial-gradient(circle at 50% 28%, rgba(255, 255, 255, 0.32), transparent 21%),
-    radial-gradient(circle at 18% 78%, rgba(255, 255, 255, 0.18), transparent 24%),
-    linear-gradient(155deg, #4b241c, #9f4429 48%, #f0b35b);
+    linear-gradient(90deg, rgba(44, 24, 17, 0.09) 1px, transparent 1px),
+    linear-gradient(rgba(44, 24, 17, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at 50% 28%, rgba(255, 248, 216, 0.32), transparent 21%),
+    linear-gradient(155deg, #4b241c, #9f4429 48%, #dca757);
+  background-size: 18px 18px, 18px 18px, auto, auto;
   isolation: isolate;
 }
 
@@ -677,8 +679,11 @@ button:hover:not(:disabled) {
 
 .tarot-art[data-suit="major"] {
   background:
-    radial-gradient(circle at 50% 28%, rgba(255, 255, 255, 0.34), transparent 22%),
-    linear-gradient(155deg, #26172f, #8f4f59 48%, #f0bd6f);
+    linear-gradient(90deg, rgba(47, 25, 15, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(47, 25, 15, 0.07) 1px, transparent 1px),
+    radial-gradient(circle at 50% 32%, rgba(255, 235, 180, 0.3), transparent 24%),
+    linear-gradient(155deg, #2a1b22, #755342 48%, #c49250);
+  background-size: 18px 18px, 18px 18px, auto, auto;
 }
 
 .tarot-art[data-card="fool"] {
@@ -817,11 +822,11 @@ button:hover:not(:disabled) {
   position: absolute;
   inset: 12px;
   z-index: 5;
-  border: 1px solid rgba(255, 248, 235, 0.58);
+  border: 1px solid rgba(255, 236, 197, 0.62);
   border-radius: 14px;
   box-shadow:
     inset 0 0 0 1px rgba(25, 16, 18, 0.15),
-    inset 0 0 28px rgba(255, 248, 235, 0.12);
+    inset 0 0 28px rgba(255, 236, 197, 0.12);
   content: "";
 }
 
@@ -863,140 +868,130 @@ button:hover:not(:disabled) {
 
 .tarot-art-symbol {
   position: absolute;
-  top: 25%;
+  top: 24%;
   left: 50%;
   z-index: 4;
   display: block;
-  width: 68px;
-  height: 68px;
-  border: 2px solid rgba(255, 248, 235, 0.68);
-  border-radius: 50%;
+  width: 82px;
+  height: 82px;
+  border: 1px solid rgba(255, 248, 235, 0.34);
+  border-radius: 24px;
   background:
-    radial-gradient(circle, rgba(255, 248, 235, 0.34) 0 14%, transparent 15%),
-    rgba(255, 248, 235, 0.08);
+    radial-gradient(circle at 38% 24%, rgba(255, 255, 255, 0.35), transparent 24%),
+    linear-gradient(145deg, rgba(255, 248, 235, 0.18), rgba(255, 248, 235, 0.04));
   box-shadow:
-    inset 0 0 24px rgba(255, 248, 235, 0.16),
-    0 10px 24px rgba(0, 0, 0, 0.24);
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -18px 36px rgba(20, 12, 16, 0.14),
+    0 14px 24px rgba(0, 0, 0, 0.26);
   transform: translateX(-50%);
 }
 
-.tarot-art-symbol::before,
-.tarot-art-symbol::after {
+.tarot-art[data-suit="major"] .tarot-art-symbol {
+  top: 21%;
+  width: 68%;
+  max-width: 128px;
+  height: 50%;
+  border-color: rgba(255, 231, 184, 0.44);
+  border-radius: 16px;
+  background:
+    linear-gradient(90deg, rgba(80, 46, 29, 0.12) 1px, transparent 1px),
+    linear-gradient(rgba(80, 46, 29, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 50% 24%, rgba(255, 244, 215, 0.2), transparent 32%),
+    linear-gradient(145deg, rgba(255, 231, 184, 0.22), rgba(53, 30, 24, 0.2));
+  background-size: 13px 13px, 13px 13px, auto, auto;
+}
+
+.tarot-art-symbol svg {
   position: absolute;
-  content: "";
+  inset: 13px;
+  width: calc(100% - 26px);
+  height: calc(100% - 26px);
+  overflow: visible;
 }
 
-.tarot-art-symbol::before {
-  inset: 14px;
-  border: 1px solid rgba(255, 248, 235, 0.58);
-  border-radius: inherit;
+.tarot-art[data-suit="major"] .tarot-art-symbol svg {
+  inset: 8px;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
 }
 
-.tarot-art-symbol::after {
-  inset: 50% 13px auto;
-  height: 2px;
-  border-radius: 999px;
-  background: rgba(255, 248, 235, 0.68);
-  transform: translateY(-50%);
+.tarot-art-symbol svg path,
+.tarot-art-symbol svg circle {
+  fill: none;
+  stroke: rgba(255, 248, 235, 0.9);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.22));
 }
 
-.tarot-art[data-card="temperance"] .tarot-art-symbol {
-  width: 76px;
-  height: 70px;
-  border: 0;
-  border-radius: 0;
+.tarot-art[data-suit="major"] .tarot-art-symbol svg path,
+.tarot-art[data-suit="major"] .tarot-art-symbol svg circle {
+  stroke: rgba(255, 241, 210, 0.94);
+  stroke-width: 5.8;
+}
+
+.tarot-art-symbol svg circle,
+.tarot-art-symbol svg path:first-child {
+  fill: rgba(255, 248, 235, 0.12);
+}
+
+.tarot-art-symbol .glyph-accent {
+  stroke: #ffd56f;
+  fill: rgba(255, 213, 111, 0.18);
+}
+
+.tarot-art[data-card="devil"] .tarot-art-symbol,
+.tarot-art[data-card="death"] .tarot-art-symbol,
+.tarot-art[data-card="hanged"] .tarot-art-symbol {
   background:
-    linear-gradient(130deg, transparent 0 38%, rgba(255, 248, 235, 0.8) 39% 42%, transparent 43%),
-    linear-gradient(130deg, transparent 0 58%, rgba(255, 248, 235, 0.8) 59% 62%, transparent 63%);
-  box-shadow: none;
+    radial-gradient(circle at 42% 24%, rgba(255, 255, 255, 0.22), transparent 24%),
+    linear-gradient(145deg, #2d1b23, #7a2c34);
 }
 
-.tarot-art[data-card="temperance"] .tarot-art-symbol::before,
-.tarot-art[data-card="temperance"] .tarot-art-symbol::after {
-  top: 9px;
-  width: 24px;
-  height: 38px;
-  border: 2px solid rgba(255, 248, 235, 0.7);
-  border-top: 0;
-  border-radius: 0 0 16px 16px;
-  background: transparent;
-  transform: rotate(-18deg);
-}
-
-.tarot-art[data-card="temperance"] .tarot-art-symbol::before {
-  left: 6px;
-}
-
-.tarot-art[data-card="temperance"] .tarot-art-symbol::after {
-  right: 6px;
-  transform: rotate(18deg);
-}
-
-.tarot-art[data-card="devil"] .tarot-art-symbol {
-  width: 74px;
-  height: 74px;
-  border-radius: 30px 30px 18px 18px;
-  background: rgba(255, 248, 235, 0.08);
-}
-
-.tarot-art[data-card="devil"] .tarot-art-symbol::before {
-  inset: 12px 17px 16px;
-  border: 2px solid rgba(255, 248, 235, 0.68);
-  border-top: 0;
-  border-radius: 0 0 22px 22px;
-}
-
-.tarot-art[data-card="devil"] .tarot-art-symbol::after {
-  inset: -4px 10px auto;
-  height: 26px;
-  border: 2px solid rgba(255, 248, 235, 0.66);
-  border-bottom: 0;
-  border-radius: 28px 28px 0 0;
-  background: transparent;
-  transform: none;
-}
-
-.tarot-art[data-card="tower"] .tarot-art-symbol {
-  width: 56px;
-  height: 82px;
-  border-radius: 8px 8px 2px 2px;
+.tarot-art[data-card="temperance"] .tarot-art-symbol,
+.tarot-art[data-card="chariot"] .tarot-art-symbol,
+.tarot-art[data-card="hermit"] .tarot-art-symbol {
   background:
-    linear-gradient(115deg, transparent 0 44%, rgba(255, 220, 132, 0.82) 45% 52%, transparent 53%),
-    rgba(255, 248, 235, 0.08);
+    radial-gradient(circle at 42% 24%, rgba(255, 255, 255, 0.28), transparent 24%),
+    linear-gradient(145deg, #315d62, #9b8f58);
 }
 
-.tarot-art[data-card="tower"] .tarot-art-symbol::before {
-  inset: 10px 13px;
-  border: 1px solid rgba(255, 248, 235, 0.5);
-  border-radius: 4px;
-}
-
-.tarot-art[data-card="tower"] .tarot-art-symbol::after {
-  inset: 13px auto auto 50%;
-  width: 2px;
-  height: 54px;
-  background: rgba(255, 220, 132, 0.78);
-  transform: translateX(-50%) rotate(22deg);
+.tarot-art[data-card="tower"] .tarot-art-symbol,
+.tarot-art[data-card="emperor"] .tarot-art-symbol,
+.tarot-art[data-card="hierophant"] .tarot-art-symbol {
+  background:
+    radial-gradient(circle at 42% 24%, rgba(255, 255, 255, 0.25), transparent 24%),
+    linear-gradient(145deg, #4d3941, #9f6b39);
 }
 
 .tarot-art[data-card="star"] .tarot-art-symbol {
-  width: 78px;
-  height: 78px;
-  border: 0;
   background:
-    radial-gradient(circle at 50% 50%, rgba(255, 248, 235, 0.72) 0 7%, transparent 8%),
-    repeating-conic-gradient(from 0deg, rgba(255, 248, 235, 0.62) 0 6deg, transparent 6deg 30deg);
-  box-shadow: none;
-  mask-image: radial-gradient(circle, #000 0 58%, transparent 59%);
+    radial-gradient(circle at 42% 24%, rgba(255, 255, 255, 0.28), transparent 24%),
+    linear-gradient(145deg, #5b87bc, #b8c79c);
 }
 
-.tarot-art[data-card="star"] .tarot-art-symbol::before {
-  inset: 18px;
-  border-color: rgba(255, 248, 235, 0.62);
+.tarot-art[data-card="sun"] .tarot-art-symbol {
+  background:
+    radial-gradient(circle at 42% 24%, rgba(255, 255, 255, 0.32), transparent 24%),
+    linear-gradient(145deg, #d56d2d, #e6c85d);
 }
 
-.tarot-art[data-card="star"] .tarot-art-symbol::after {
-  display: none;
+.tarot-art[data-card="moon"] .tarot-art-symbol,
+.tarot-art[data-card="priestess"] .tarot-art-symbol,
+.tarot-art[data-card="justice"] .tarot-art-symbol,
+.tarot-art[data-card="judgement"] .tarot-art-symbol {
+  background:
+    radial-gradient(circle at 42% 24%, rgba(255, 255, 255, 0.25), transparent 24%),
+    linear-gradient(145deg, #2f3d58, #a18b62);
+}
+
+.tarot-art[data-card="fortune"] .tarot-art-symbol,
+.tarot-art[data-card="world"] .tarot-art-symbol {
+  border-radius: 50%;
+  background:
+    conic-gradient(from 25deg, rgba(255, 248, 235, 0.22), rgba(255, 248, 235, 0.04), rgba(255, 248, 235, 0.22)),
+    rgba(255, 248, 235, 0.08);
 }
 
 .tarot-art-mark {

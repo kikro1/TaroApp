@@ -352,6 +352,257 @@ function getCardVisualMeta(cardName) {
   return { suit: "major", key: "major" };
 }
 
+function renderCardGlyph(key) {
+  const glyphs = {
+    fool: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M42 52C28 20 11 25 11 48c0 16 13 22 27 12" />
+        <path d="M78 52c14-32 31-27 31-4 0 16-13 22-27 12" />
+        <circle cx="12" cy="53" r="7" />
+        <circle cx="108" cy="53" r="7" />
+        <path d="M37 61c1-22 45-22 46 0" />
+        <path d="M38 61c5-14 39-14 44 0" />
+        <path d="M36 64c1 34 47 34 48 0" />
+        <path d="M42 64c4 8 32 8 36 0" />
+        <path d="M43 78c7-5 14-5 20 0M57 78c7-5 14-5 20 0" />
+        <path d="M55 88c3 3 7 3 10 0" />
+        <path d="M49 97c7 5 15 5 22 0" />
+        <path d="M26 116c8-15 15-15 23 0 7-15 15-15 22 0 8-15 15-15 23 0" />
+        <path d="M24 123h72" />
+      </svg>
+    `,
+    magician: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M40 34c9-18 31-18 40 0l-9 10H49l-9-10Z" />
+        <circle cx="60" cy="54" r="15" />
+        <path d="M43 78c9-12 25-13 34 0l8 52H35l8-52Z" />
+        <path d="M26 103h68M36 111h48" />
+        <path d="M83 72l20-42M96 30l7-13 5 14" />
+        <path d="M47 25c9-9 17-9 26 0" />
+      </svg>
+    `,
+    priestess: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M27 26v100M93 26v100" />
+        <path d="M22 26h20M78 26h20M22 126h20M78 126h20" />
+        <circle cx="60" cy="52" r="15" />
+        <path d="M45 36c7-16 23-16 30 0M48 31h24" />
+        <path d="M42 75c13-11 23-11 36 0l8 54H34l8-54Z" />
+        <path d="M45 94h30M49 107h22" />
+        <path d="M35 132c15-14 35-14 50 0" />
+      </svg>
+    `,
+    empress: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M34 47 44 25l16 17 16-17 10 22H34Z" />
+        <path d="M41 47h38" />
+        <circle cx="60" cy="82" r="24" />
+        <path d="M60 106v26M45 119h30" />
+        <path d="M31 82c-10-10-10-25 0-35M89 82c10-10 10-25 0-35" />
+      </svg>
+    `,
+    emperor: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M38 48 47 26l13 16 13-16 9 22H38Z" />
+        <path d="M42 48h36" />
+        <path d="M42 63h36v59H42z" />
+        <path d="M52 78h16v44H52z" />
+        <path d="M32 122h56" />
+        <path d="M36 63h48" />
+      </svg>
+    `,
+    hierophant: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M45 39 60 18l15 21-15 10-15-10Z" />
+        <circle cx="60" cy="58" r="14" />
+        <path d="M36 83c13-15 35-15 48 0l5 48H31l5-48Z" />
+        <path d="M60 78v50M48 100h24" />
+        <path d="M88 55v77M82 64h12" />
+        <path d="M37 116c-9-8-8-19 0-26M83 116c9-8 8-19 0-26" />
+      </svg>
+    `,
+    lovers: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M60 35c9-18 34-4 18 13L60 66 42 48C26 31 51 17 60 35Z" />
+        <circle cx="39" cy="76" r="12" />
+        <circle cx="81" cy="76" r="12" />
+        <path d="M27 100c7-13 18-13 25 0l-4 30H31l-4-30Z" />
+        <path d="M68 100c7-13 18-13 25 0l-4 30H72l-4-30Z" />
+        <path d="M49 108c8 10 14 10 22 0" />
+        <path d="M24 132h72" />
+      </svg>
+    `,
+    chariot: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M35 48h50l-6 34H41l-6-34Z" />
+        <path d="M43 48V34h34v14M36 34h48" />
+        <circle cx="60" cy="34" r="11" />
+        <path d="M47 22h26" />
+        <path d="M31 82h58l-8 37H39l-8-37Z" />
+        <circle cx="42" cy="123" r="10" />
+        <circle cx="78" cy="123" r="10" />
+        <path d="M20 112c12-23 28-20 33-3M100 112c-12-23-28-20-33-3" />
+      </svg>
+    `,
+    strength: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M62 35c16-18 45-3 37 24-4 15-17 28-33 29" />
+        <path d="M77 39c-8 0-16 7-17 16 10-3 18-3 27 2" />
+        <circle cx="80" cy="58" r="3" />
+        <path d="M49 40c-10 0-17 7-17 17s7 17 17 17" />
+        <path d="M39 76c-10 11-12 32-3 49h28c8-17 7-38-3-49" />
+        <path d="M52 74c3 16 18 22 35 15" />
+        <path d="M35 126h50" />
+      </svg>
+    `,
+    hermit: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M41 29 78 129" />
+        <path d="M54 43c21-8 38-1 48 17-13 13-35 11-52-4" />
+        <path d="M63 56c9 5 18 7 28 4" />
+        <path d="M33 132h52" />
+      </svg>
+    `,
+    temperance: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M36 34h28l-6 30c-3 12-19 12-22 0l-6-30h6Z" />
+        <path d="M58 62c13 11 24 14 37 5" />
+        <path d="M72 43h28l-6 30c-3 12-19 12-22 0l-6-30h6Z" />
+        <path d="M30 99c17 12 43 12 60 0" />
+        <path d="M24 118c20 14 52 14 72 0" />
+        <path d="M43 28c12-8 25-8 37 0" />
+      </svg>
+    `,
+    devil: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M60 24v96" />
+        <path d="M43 44c10-20 24-20 34 0" />
+        <path d="M39 61h42" />
+        <path d="M60 120 43 99h34l-17 21Z" />
+        <path d="M44 29c-15-2-25-10-30-24 16 1 27 9 34 23" />
+        <path d="M76 29c15-2 25-10 30-24-16 1-27 9-34 23" />
+      </svg>
+    `,
+    tower: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M36 42h48v91H36V42Z" />
+        <path d="M30 42h60l-9-18H39l-9 18Z" />
+        <path d="M39 24v-9M54 24v-9M66 24v-9M81 24v-9" />
+        <path d="M50 75h20v58H50V75Z" />
+        <path d="M75 42 57 78h20l-18 42 34-58H72l13-20Z" class="glyph-accent" />
+      </svg>
+    `,
+    star: `
+      <svg viewBox="0 0 96 96" aria-hidden="true">
+        <path d="M48 12 55 40 83 48 55 56 48 84 41 56 13 48 41 40z" />
+        <path d="M48 29v38M29 48h38" />
+      </svg>
+    `,
+    sun: `
+      <svg viewBox="0 0 96 96" aria-hidden="true">
+        <circle cx="48" cy="48" r="19" />
+        <path d="M48 8v17M48 71v17M8 48h17M71 48h17M20 20l12 12M64 64l12 12M76 20 64 32M32 64 20 76" />
+      </svg>
+    `,
+    moon: `
+      <svg viewBox="0 0 96 96" aria-hidden="true">
+        <path d="M59 14c-20 5-31 27-20 46 7 12 21 19 35 16-8 8-21 12-34 8-20-6-31-27-25-47 6-19 25-29 44-23Z" />
+        <path d="M30 78c9-8 27-8 36 0" />
+      </svg>
+    `,
+    fortune: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <circle cx="60" cy="75" r="45" />
+        <circle cx="60" cy="75" r="15" />
+        <path d="M60 30v90M15 75h90M28 43l64 64M92 43l-64 64" />
+        <path d="M60 18 68 30H52l8-12ZM60 132l-8-12h16l-8 12ZM3 75l12-8v16L3 75ZM117 75l-12 8V67l12 8Z" />
+      </svg>
+    `,
+    justice: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M60 24v98M42 122h36M50 136h20" />
+        <path d="M30 50h60" />
+        <path d="M30 50 17 83h26L30 50ZM90 50 77 83h26L90 50Z" />
+        <path d="M17 83c6 9 20 9 26 0M77 83c6 9 20 9 26 0" />
+        <path d="M52 24h16M45 32h30" />
+      </svg>
+    `,
+    hanged: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M28 24h64M36 24v110M28 134h42" />
+        <path d="M78 24v22" />
+        <circle cx="78" cy="61" r="11" />
+        <path d="M78 72v35M59 84l19 15 20-15" />
+        <path d="M78 107 62 130M78 107l16 23" />
+      </svg>
+    `,
+    death: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M60 21v108" />
+        <path d="M35 47c18-18 32-18 50 0" />
+        <path d="M28 66h64" />
+        <path d="M43 86h34" />
+        <path d="M60 129 38 103h44l-22 26Z" />
+        <path d="M38 32c-12 2-22-4-29-16 14-2 25 3 33 14" />
+        <path d="M82 32c12 2 22-4 29-16-14-2-25 3-33 14" />
+      </svg>
+    `,
+    world: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <circle cx="60" cy="75" r="38" />
+        <path d="M36 102c10-18 38-18 48 0M36 48c10 18 38 18 48 0" />
+        <path d="M60 37c-16 16-16 60 0 76M60 37c16 16 16 60 0 76" />
+        <path d="M31 34c-20 20-20 62 0 82M89 34c20 20 20 62 0 82" />
+        <path d="M29 34c-7 8-15 11-24 8M91 34c7 8 15 11 24 8M29 116c-7-8-15-11-24-8M91 116c7-8 15-11 24-8" />
+      </svg>
+    `,
+    judgement: `
+      <svg viewBox="0 0 120 150" aria-hidden="true">
+        <path d="M60 22v88M41 110h38M48 126h24" />
+        <path d="M36 58h48" />
+        <path d="M36 58 25 89h22L36 58ZM84 58 73 89h22L84 58Z" />
+        <path d="M25 89c5 8 17 8 22 0M73 89c5 8 17 8 22 0" />
+        <path d="M43 37 76 20l7 14-34 17-6-14Z" />
+        <path d="M80 20c10-1 20 3 27 11-9 7-19 8-29 3" />
+      </svg>
+    `,
+    cups: `
+      <svg viewBox="0 0 96 96" aria-hidden="true">
+        <path d="M26 24h44l-7 33c-3 14-27 14-30 0l-7-33Z" />
+        <path d="M48 70v12M33 82h30" />
+      </svg>
+    `,
+    swords: `
+      <svg viewBox="0 0 96 96" aria-hidden="true">
+        <path d="M48 10v60" />
+        <path d="M34 70h28" />
+        <path d="M40 82h16" />
+        <path d="M48 10 37 31h22L48 10Z" />
+      </svg>
+    `,
+    pentacles: `
+      <svg viewBox="0 0 96 96" aria-hidden="true">
+        <path d="M48 13 58 38h27L63 54l9 27-24-16-24 16 9-27-22-16h27z" />
+      </svg>
+    `,
+    wands: `
+      <svg viewBox="0 0 96 96" aria-hidden="true">
+        <path d="M31 77 65 19" />
+        <path d="M58 22c9 1 15 5 18 13-10 1-18-2-24-9" />
+        <path d="M39 62c-8-1-14-5-17-12 9-1 16 2 22 8" />
+      </svg>
+    `,
+  };
+
+  return glyphs[key] || `
+    <svg viewBox="0 0 96 96" aria-hidden="true">
+      <circle cx="48" cy="48" r="30" />
+      <circle cx="48" cy="48" r="10" />
+      <path d="M48 18v60M18 48h60" />
+    </svg>
+  `;
+}
+
 function renderCardVisual(card, index, dict) {
   const visual = getCardVisualMeta(card.baseName);
   const image = typeof card.image === "string" && card.image.trim()
@@ -363,7 +614,7 @@ function renderCardVisual(card, index, dict) {
       <div class="tarot-art" data-suit="${escapeHtml(visual.suit)}" data-card="${escapeHtml(visual.key)}" aria-hidden="true">
         <span class="tarot-art-roman">${escapeHtml(card.baseName.split(" ")[0])}</span>
         <span class="tarot-art-rays"></span>
-        <span class="tarot-art-symbol"></span>
+        <span class="tarot-art-symbol has-glyph">${renderCardGlyph(visual.key)}</span>
         <span class="tarot-art-mark"></span>
         <span class="tarot-art-orbit"></span>
         <span class="tarot-art-title">${escapeHtml(card.baseName)}</span>

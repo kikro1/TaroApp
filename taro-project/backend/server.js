@@ -1,25 +1,25 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const OpenAI = require("openai");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MODEL = process.env.OPENAI_MODEL || "gpt-5-nano";
+const MODEL = process.env.GEMINI_MODEL || "gemini-1.5-flash";
 
 app.use(cors());
 app.use(express.json());
 
 function getClient() {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    throw new Error("OPENAI_API_KEY is not configured");
+    throw new Error("GEMINI_API_KEY is not configured");
   }
 
-  return new OpenAI({ apiKey });
+  return new GoogleGenerativeAI(apiKey);
 }
 
 function isNonEmptyString(value) {
@@ -67,6 +67,10 @@ app.get("/ping", (req, res) => {
   res.send("Backend is alive!");
 });
 
+app.get("/", (req, res) => {
+  res.send("Tarot backend is running");
+});
+
 app.post("/tarot", async (req, res) => {
   try {
     const { name, birth, question, positions, cards } = req.body || {};
@@ -84,7 +88,9 @@ app.post("/tarot", async (req, res) => {
     }
 
     const normalizedCards = cards.map((card, index) => ({
-      name: isNonEmptyString(card?.name) ? card.name.trim() : `Card ${index + 1}`,
+      name: isNonEmptyString(card?.name)
+        ? card.name.trim()
+        : `Card ${index + 1}`,
       meaning: isNonEmptyString(card?.meaning)
         ? card.meaning.trim()
         : "Значение не указано.",
@@ -93,22 +99,26 @@ app.post("/tarot", async (req, res) => {
     const prompt = buildPrompt({
       name: isNonEmptyString(name) ? name.trim() : "Не указано",
       birth: isNonEmptyString(birth) ? birth.trim() : "Не указано",
-      question: isNonEmptyString(question) ? question.trim() : "Общий вопрос",
+      question: isNonEmptyString(question)
+        ? question.trim()
+        : "Общий вопрос",
       positions,
       cards: normalizedCards,
     });
 
-    const response = await getClient().responses.create({
+    const client = getClient();
+    const model = client.getGenerativeModel({
       model: MODEL,
-      input: prompt,
     });
 
-    const text =
-      typeof response.output_text === "string" && response.output_text.trim()
-        ? response.output_text
-        : "Не удалось получить ответ от модели.";
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
 
-    return res.json({ text });
+    return res.json({
+      text: text?.trim() || "Не удалось получить ответ от модели.",
+    });
+
   } catch (error) {
     console.error("AI ERROR:", error);
 
