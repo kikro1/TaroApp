@@ -1,25 +1,32 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const OpenAI = require("openai");
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+const MODEL = process.env.OPENROUTER_MODEL || "deepseek/deepseek-v4-flash:free";
 
 app.use(cors());
 app.use(express.json());
 
 function getClient() {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY;
 
   if (!apiKey) {
-    throw new Error("GEMINI_API_KEY is not configured");
+    throw new Error("OPENROUTER_API_KEY is not configured");
   }
 
-  return new GoogleGenerativeAI(apiKey);
+  return new OpenAI({
+    apiKey,
+    baseURL: "https://openrouter.ai/api/v1",
+    defaultHeaders: {
+      "HTTP-Referer": "https://kikro1.github.io/TaroApp/",
+      "X-Title": "TaroApp",
+    },
+  });
 }
 
 function isNonEmptyString(value) {
@@ -63,12 +70,12 @@ ${cardsBlock}
 `;
 }
 
-app.get("/ping", (req, res) => {
-  res.send("Backend is alive!");
-});
-
 app.get("/", (req, res) => {
   res.send("Tarot backend is running");
+});
+
+app.get("/ping", (req, res) => {
+  res.send("Backend is alive!");
 });
 
 app.post("/tarot", async (req, res) => {
@@ -88,9 +95,7 @@ app.post("/tarot", async (req, res) => {
     }
 
     const normalizedCards = cards.map((card, index) => ({
-      name: isNonEmptyString(card?.name)
-        ? card.name.trim()
-        : `Card ${index + 1}`,
+      name: isNonEmptyString(card?.name) ? card.name.trim() : `Card ${index + 1}`,
       meaning: isNonEmptyString(card?.meaning)
         ? card.meaning.trim()
         : "Значение не указано.",
@@ -99,26 +104,26 @@ app.post("/tarot", async (req, res) => {
     const prompt = buildPrompt({
       name: isNonEmptyString(name) ? name.trim() : "Не указано",
       birth: isNonEmptyString(birth) ? birth.trim() : "Не указано",
-      question: isNonEmptyString(question)
-        ? question.trim()
-        : "Общий вопрос",
+      question: isNonEmptyString(question) ? question.trim() : "Общий вопрос",
       positions,
       cards: normalizedCards,
     });
 
-    const client = getClient();
-    const model = client.getGenerativeModel({
+    const response = await getClient().chat.completions.create({
       model: MODEL,
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
     });
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const text = response.choices?.[0]?.message?.content?.trim();
 
     return res.json({
-      text: text?.trim() || "Не удалось получить ответ от модели.",
+      text: text || "Не удалось получить ответ от модели.",
     });
-
   } catch (error) {
     console.error("AI ERROR:", error);
 
