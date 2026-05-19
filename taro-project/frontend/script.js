@@ -659,8 +659,31 @@ function buildLocalInterpretation(payload, dict) {
       const card = cards[index] || {};
       const cardName = card.localizedName || card.name || `${index + 1}`;
       const meaning = card.meaning || "";
+      const isReversed = Boolean(card.reversed);
 
-      return `${position}: ${cardName}. ${meaning}`;
+      if (!isRu) {
+        const orientationText = isReversed
+          ? "Here the card speaks through its shadow: delay, doubt, fatigue, or an attempt to control too much."
+          : "Here the card acts as an active current in the spread: a resource, a direction, and something you can lean on.";
+
+        return `${position}
+${cardName}
+
+${meaning}
+
+${orientationText} In this position, it shows what needs attention and how the situation is moving beneath the surface. Notice both the outer events and your inner state, because the card points to where the answer is already forming.`;
+      }
+
+      const orientationText = isReversed
+        ? "Здесь карта звучит как тень или внутренний блок: энергия есть, но она может проявляться через задержку, сомнение, усталость или попытку всё контролировать."
+        : "Здесь карта звучит как активная энергия расклада: она показывает ресурс, направление и то, на что стоит опереться.";
+
+      return `${position}
+${cardName}
+
+${meaning}
+
+${orientationText} В этой позиции карта помогает увидеть, какая тема сейчас требует внимания и как она влияет на вопрос. Смотри не только на событие снаружи, но и на своё состояние: именно оно подсказывает, где ситуация раскрывается, а где пока сопротивляется.`;
     })
     .join("\n\n");
 
@@ -671,31 +694,39 @@ function buildLocalInterpretation(payload, dict) {
   if (!isRu) {
     return `
 Short answer
-The main focus for "${question}" is ${firstCardName}. ${firstMeaning}
+The main focus for "${question}" is ${firstCardName}. This card sets the tone of the spread: ${firstMeaning}
+
+This is not just a separate sign. It shows where the main knot of the situation is: feelings, expectations, choice, fatigue, or the need to see the truth more calmly.
 
 Card interpretation
 ${cardLines}
 
 Overall result
-The spread points to the practical direction already visible in the cards. Treat it as guidance rather than a fixed prediction, and choose the next step that lowers uncertainty.
+The cards form a story about where energy is already moving and where it is stuck. The spread asks you to notice the lesson inside the situation, not only the visible outcome.
+
+Taken together, the cards suggest that clarity will come through one honest step rather than pressure. Pay attention to the main motif and choose the action that makes the situation cleaner.
 
 Advice
-Act from what is clear now. A small honest step is more useful than waiting for perfect certainty.
+Do not try to solve everything at once. Choose one action that brings more truth and calm: ask directly, admit what you want, release excess control, or give yourself time.
 `.trim();
   }
 
   return `
 Краткий ответ
-Главный акцент по вопросу «${question}» сейчас связан с картой ${firstCardName}. ${firstMeaning}
+Главный акцент по вопросу «${question}» сейчас связан с картой ${firstCardName}. Она задаёт тон всему раскладу: ${firstMeaning}
+
+Это не просто отдельный знак, а центральная энергия ситуации. Она показывает, где сейчас находится главный узел: в чувствах, ожиданиях, выборе, усталости или необходимости увидеть правду спокойнее.
 
 Толкование карт
 ${cardLines}
 
 Общий итог
-Расклад показывает направление, на которое стоит обратить внимание, а не жёсткое предсказание. Сейчас важно спокойно отделить факты от тревоги и выбрать самый практичный следующий шаг.
+Карты складываются в историю о том, где энергия уже движется, а где она застревает. В раскладе важно не искать мгновенный приговор, а увидеть, какой урок ситуация просит пройти и какой ресурс уже есть внутри.
+
+Если смотреть на расклад целиком, он советует не торопить развязку силой. Лучше заметить главный мотив карт, признать свои настоящие чувства и сделать шаг, который возвращает тебе ясность.
 
 Совет
-Опирайтесь на то, что уже ясно по ситуации. Один честный и небольшой шаг даст больше, чем ожидание идеального момента.
+Сейчас лучше не распыляться. Выбери одно действие, которое делает ситуацию честнее и спокойнее: задать прямой вопрос, признать своё желание, отпустить лишний контроль или дать себе время. Именно этот небольшой шаг откроет больше, чем попытка сразу решить всё.
 `.trim();
 }
 
