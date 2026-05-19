@@ -1482,4 +1482,13 @@ button:hover:not(:disabled) {
   .gallery-card .card-visual {
     width: min(64vw, 150px);
   }
+
+  .gallery-card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .gallery-card-copy {
+    width: 100%;
+  }
 }
