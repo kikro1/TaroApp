@@ -8,6 +8,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MODEL = process.env.OPENROUTER_MODEL || "deepseek/deepseek-v4-flash:free";
+const AI_REQUEST_TIMEOUT_MS = Number(process.env.AI_REQUEST_TIMEOUT_MS) || 55000;
 
 app.use(cors());
 app.use(express.json());
@@ -22,6 +23,8 @@ function getClient() {
   return new OpenAI({
     apiKey,
     baseURL: "https://openrouter.ai/api/v1",
+    timeout: AI_REQUEST_TIMEOUT_MS,
+    maxRetries: 1,
     defaultHeaders: {
       "HTTP-Referer": "https://kikro1.github.io/TaroApp/",
       "X-Title": "TaroApp",
@@ -70,6 +73,32 @@ ${cardsBlock}
 `;
 }
 
+function buildFallbackInterpretation({ name, birth, question, positions, cards }) {
+  const cardsText = positions
+    .map((position, index) => {
+      const card = cards[index];
+      return `${position}: ${card.name}. ${card.meaning}`;
+    })
+    .join("\n\n");
+
+  const firstCard = cards[0];
+  const questionText = isNonEmptyString(question) ? question : "вашему вопросу";
+
+  return `
+Краткий ответ
+По вопросу «${questionText}» главный акцент сейчас связан с картой ${firstCard.name}. Она указывает на тему: ${firstCard.meaning}
+
+Толкование карт
+${cardsText}
+
+Общий итог
+${name !== "Не указано" ? `${name}, ` : ""}расклад показывает не одно жёсткое предсказание, а направление, на которое стоит обратить внимание. ${birth !== "Не указано" ? "Дата рождения учтена как личный контекст, но основной смысл дают выпавшие карты. " : ""}Сейчас важно спокойно отделить факты от тревоги и выбрать самый практичный следующий шаг.
+
+Совет
+Опирайтесь на то, что уже ясно по ситуации, и не пытайтесь контролировать всё сразу. Один честный и небольшой шаг даст больше, чем ожидание идеального момента.
+`.trim();
+}
+
 app.get("/", (req, res) => {
   res.send("Tarot backend is running");
 });
@@ -109,21 +138,42 @@ app.post("/tarot", async (req, res) => {
       cards: normalizedCards,
     });
 
-    const response = await getClient().chat.completions.create({
-      model: MODEL,
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-    });
+    try {
+      const response = await getClient().chat.completions.create({
+        model: MODEL,
+        messages: [
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+      });
 
-    const text = response.choices?.[0]?.message?.content?.trim();
+      const text = response.choices?.[0]?.message?.content?.trim();
 
-    return res.json({
-      text: text || "Не удалось получить ответ от модели.",
-    });
+      return res.json({
+        text: text || buildFallbackInterpretation({
+          name: isNonEmptyString(name) ? name.trim() : "Не указано",
+          birth: isNonEmptyString(birth) ? birth.trim() : "Не указано",
+          question: isNonEmptyString(question) ? question.trim() : "Общий вопрос",
+          positions,
+          cards: normalizedCards,
+        }),
+      });
+    } catch (error) {
+      console.error("AI PROVIDER ERROR:", error);
+
+      return res.json({
+        text: buildFallbackInterpretation({
+          name: isNonEmptyString(name) ? name.trim() : "Не указано",
+          birth: isNonEmptyString(birth) ? birth.trim() : "Не указано",
+          question: isNonEmptyString(question) ? question.trim() : "Общий вопрос",
+          positions,
+          cards: normalizedCards,
+        }),
+        fallback: true,
+      });
+    }
   } catch (error) {
     console.error("AI ERROR:", error);
 

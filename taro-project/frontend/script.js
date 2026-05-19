@@ -1,7 +1,7 @@
 const DEFAULT_LANG = "ru";
 const LOCAL_API_URL = "http://localhost:3000";
 const REMOTE_API_URL = "https://taroapp.onrender.com";
-const REQUEST_TIMEOUT_MS = 30000;
+const REQUEST_TIMEOUT_MS = 90000;
 const MAJOR_ARCANA_RU = {
   "0 The Fool": "0 Шут",
   "I The Magician": "I Маг",
@@ -646,6 +646,59 @@ function renderError(message) {
   result.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+function buildLocalInterpretation(payload, dict) {
+  const isRu = getCurrentLang() === "ru";
+  const positions = Array.isArray(payload.positions) ? payload.positions : [];
+  const cards = Array.isArray(payload.cards) ? payload.cards : [];
+  const question = payload.question || dict.defaultQuestion;
+  const firstCard = cards[0];
+  const firstCardName = firstCard?.localizedName || firstCard?.name || "";
+  const firstMeaning = firstCard?.meaning || "";
+  const cardLines = positions
+    .map((position, index) => {
+      const card = cards[index] || {};
+      const cardName = card.localizedName || card.name || `${index + 1}`;
+      const meaning = card.meaning || "";
+
+      return `${position}: ${cardName}. ${meaning}`;
+    })
+    .join("\n\n");
+
+  if (!cards.length) {
+    return dict.errors.empty;
+  }
+
+  if (!isRu) {
+    return `
+Short answer
+The main focus for "${question}" is ${firstCardName}. ${firstMeaning}
+
+Card interpretation
+${cardLines}
+
+Overall result
+The spread points to the practical direction already visible in the cards. Treat it as guidance rather than a fixed prediction, and choose the next step that lowers uncertainty.
+
+Advice
+Act from what is clear now. A small honest step is more useful than waiting for perfect certainty.
+`.trim();
+  }
+
+  return `
+Краткий ответ
+Главный акцент по вопросу «${question}» сейчас связан с картой ${firstCardName}. ${firstMeaning}
+
+Толкование карт
+${cardLines}
+
+Общий итог
+Расклад показывает направление, на которое стоит обратить внимание, а не жёсткое предсказание. Сейчас важно спокойно отделить факты от тревоги и выбрать самый практичный следующий шаг.
+
+Совет
+Опирайтесь на то, что уже ясно по ситуации. Один честный и небольшой шаг даст больше, чем ожидание идеального момента.
+`.trim();
+}
+
 async function askAI(payload, dict) {
   const controller = new AbortController();
   const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
@@ -669,6 +722,10 @@ async function askAI(payload, dict) {
       }
     }
 
+    if (response.status >= 500) {
+      return buildLocalInterpretation(payload, dict);
+    }
+
     if (!response.ok || data.error) {
       return data.details || data.error || dict.errors.server;
     }
@@ -678,10 +735,10 @@ async function askAI(payload, dict) {
       : dict.errors.empty;
   } catch (error) {
     if (error?.name === "AbortError") {
-      return dict.errors.unavailable;
+      return buildLocalInterpretation(payload, dict);
     }
 
-    return dict.errors.unavailable;
+    return buildLocalInterpretation(payload, dict);
   } finally {
     window.clearTimeout(timeoutId);
   }
