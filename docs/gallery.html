@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarot - Галерея карт</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+
+  <main class="container">
+    <section class="hero gallery-hero" aria-labelledby="galleryTitle">
+      <div class="settings-panel" aria-label="Настройки">
+        <div class="language-switch">
+          <label for="langSelect" data-i18n="langLabel">Язык:</label>
+          <select id="langSelect">
+            <option value="ru" selected>Русский</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+
+        <div class="theme-switch">
+          <span data-i18n="themeLabel">Тема:</span>
+          <button id="themeToggle" class="ghost-button" type="button" aria-pressed="false">
+            <span class="theme-icon" aria-hidden="true"></span>
+            <span data-i18n="themeToggle">Сменить</span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="page-nav" aria-label="Навигация">
+        <a class="nav-link" href="index.html" data-gallery-i18n="backToReading">К раскладу</a>
+        <a class="nav-link is-active" href="gallery.html" data-gallery-i18n="galleryNav">Галерея</a>
+      </nav>
+
+      <p class="eyebrow" data-gallery-i18n="eyebrow">Полная колода</p>
+      <h1 id="galleryTitle" data-gallery-i18n="title">Галерея карт</h1>
+      <p class="description" data-gallery-i18n="description">Все 78 карт с прямыми и перевёрнутыми значениями.</p>
+    </section>
+
+    <section class="panel gallery-controls" aria-label="Фильтры галереи">
+      <label for="cardSearch" data-gallery-i18n="searchLabel">Поиск карты</label>
+      <input id="cardSearch" type="search" autocomplete="off" data-gallery-placeholder="searchPlaceholder" placeholder="Название или значение" />
+
+      <label for="suitFilter" data-gallery-i18n="suitLabel">Раздел</label>
+      <select id="suitFilter">
+        <option value="all" data-gallery-i18n="allCards">Все карты</option>
+        <option value="major" data-gallery-i18n="majorArcana">Старшие арканы</option>
+        <option value="wands" data-gallery-i18n="wands">Жезлы</option>
+        <option value="cups" data-gallery-i18n="cups">Кубки</option>
+        <option value="swords" data-gallery-i18n="swords">Мечи</option>
+        <option value="pentacles" data-gallery-i18n="pentacles">Пентакли</option>
+      </select>
+    </section>
+
+    <section class="gallery-summary" aria-live="polite">
+      <span id="galleryCount"></span>
+    </section>
+
+    <section id="cardsGallery" class="cards-gallery" aria-live="polite"></section>
+  </main>
+
+  <script src="cards.js"></script>
+  <script src="script.js"></script>
+  <script src="gallery.js"></script>
+</body>
+</html>
