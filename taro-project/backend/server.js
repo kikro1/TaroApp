@@ -107,6 +107,15 @@ app.get("/ping", (req, res) => {
   res.send("Backend is alive!");
 });
 
+app.get("/version", (req, res) => {
+  res.json({
+    service: "TaroApp backend",
+    commit: process.env.RENDER_GIT_COMMIT || "local",
+    aiTimeoutMs: AI_REQUEST_TIMEOUT_MS,
+    model: MODEL,
+  });
+});
+
 app.post("/tarot", async (req, res) => {
   try {
     const { name, birth, question, positions, cards } = req.body || {};
